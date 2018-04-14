@@ -1,3 +1,4 @@
+//Collection of neurons in a feedforward structure that can make decisions
 class Network
 {
     Neuron[] inputLayer;
@@ -6,6 +7,7 @@ class Network
 
     Dna dna;
 
+    //Creates a network with random weights with the specified amount of neurons
     public Network(int numOfInputs, int numOfHidden, int numOfOutputs)
     {
         inputLayer = new Neuron[numOfInputs];
@@ -28,6 +30,7 @@ class Network
         }
     }
 
+    //Creates a network from DNA
     public Network(Dna dna)
     {
         inputLayer = new Neuron[dna.numOfInputs];
@@ -101,6 +104,7 @@ class Network
         }
     }
 
+    //Sets the DNA of a network
     void setDNA(Dna dna)
     {
         this.dna = dna;

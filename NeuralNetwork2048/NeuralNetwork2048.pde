@@ -27,6 +27,10 @@ void draw()
 
         println("Best so Far: " + sqrt(population.best.fitness));
     }
+    else
+    {
+        population.best.output("best.txt");
+    }
     population.show(width / 2, height / 2);
 }
 

@@ -381,6 +381,7 @@ class Game
         return array;
     }
 
+    //Checks if the game has ended
     void update()
     {
         if(!gameOver)

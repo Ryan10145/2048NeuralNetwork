@@ -1,3 +1,4 @@
+//Manages creating multiple networks, crossing them, mutating them, and breeding new generations based on fitness
 class Population
 {
     Dna[] currentPopulation;
@@ -9,6 +10,7 @@ class Population
 
     Dna best;
 
+    //Creates a population that manages a game with a specified amount of columns and rows
     public Population(int cols, int rows)
     {
         currentPopulation = new Dna[100];
@@ -26,6 +28,7 @@ class Population
         best = null;
     }
 
+    //Runs all of the networks in the current population
     void run()
     {
         for(int i = 0; i < currentPopulation.length; i++)
@@ -62,6 +65,7 @@ class Population
         }
     }
 
+    //Crosses the best neural networks and randomly mutates them
     void update()
     {
         ArrayList<Dna> matingPool = new ArrayList<Dna>();
@@ -88,6 +92,7 @@ class Population
         println(generationCount + " : " + bestFitness);
     }
     
+    //Gets the highest fitness of the generation;
     float getMaxFitness()
     {
         float highest = 0;
@@ -102,6 +107,7 @@ class Population
         return highest;
     }
 
+    //Gets the best network of the generation
     Dna getBest()
     {
         Dna best = null;
@@ -121,6 +127,7 @@ class Population
         return best;
     }
 
+    //Draws the game
     void show(float centerX, float centerY)
     {
         game.draw(centerX, centerY);

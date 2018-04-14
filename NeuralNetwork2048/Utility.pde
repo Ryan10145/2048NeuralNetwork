@@ -1,3 +1,4 @@
+//Enum for handling move directions
 enum Direction
 {
     UP,
@@ -6,8 +7,10 @@ enum Direction
     LEFT
 }
 
+//Precalculated sigmoid values to save computation time
 float[] precalculatedSigmoidValues = new float[200];
 
+//Precompute the sigmoid values
 void setupSigmoidValues()
 {
     for(int i = 0; i < 200; i++)
@@ -17,11 +20,13 @@ void setupSigmoidValues()
     }
 }
 
+//Access the array to calculate the sigmoid function 
 float getSigmoid(float input)
 {
   return precalculatedSigmoidValues[constrain((int) floor((input + 5.0) * 20.0), 0, 199)];
 }
 
+//Creates a random array of weights
 float[] getRandomWeights(int length)
 {
     float[] random = new float[length];
@@ -33,6 +38,7 @@ float[] getRandomWeights(int length)
     return random;
 }
 
+//Calculates the log base 2 of a number up to 2^17
 float logBase2(float valueF)
 {
     int value = round(valueF);

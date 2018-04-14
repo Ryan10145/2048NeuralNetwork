@@ -1,3 +1,4 @@
+//Stores the weights of a neural network and supports crossing over and mutating
 class Dna
 {
     float[][][] weights;
@@ -11,6 +12,7 @@ class Dna
         this.numOfOutputs = numOfOutputs;
         this.fitness = 0;
 
+        //Create a series of random weights
         weights = new float[2][][];
 
         weights[0] = new float[numOfHidden][numOfInputs];
@@ -27,6 +29,7 @@ class Dna
         }
     }
 
+    //Crosses the current DNA with a mate to form a child that has parts of both DNA
     Dna cross(Dna mate)
     {
         Dna child = new Dna(numOfInputs, numOfHidden, numOfOutputs);
@@ -46,6 +49,7 @@ class Dna
         return child;
     }
 
+    //Randomly mutates weights to add variation
     void mutate()
     {
         for(int i = 0; i < weights.length; i++)
@@ -60,6 +64,7 @@ class Dna
         }   
     }
 
+    //Outputs the weights to a file so that they can be saved
     void output(String fileName)
     {
         PrintWriter writer = createWriter(fileName);
@@ -80,6 +85,7 @@ class Dna
         writer.close();
     }
 
+    //Reads in weights from an exported file
     void input(String fileName)
     {
         try

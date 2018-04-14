@@ -1,5 +1,4 @@
 //A basic feed forward neuron
-
 class Neuron
 {
     Neuron[] inputs;
@@ -23,6 +22,7 @@ class Neuron
         }
     }
 
+    //Calculates the output value of a neuron
     void respond()
     {
         float sum = 0.0;
@@ -35,11 +35,13 @@ class Neuron
         output = getSigmoid(sum);
     }
 
+    //Sets the weights of a neuron
     void setWeights(float[] weights)
     {
         this.weights = weights;
     }
 
+    //Displays a neuron at the specified coordinates
     void show(float x, float y)
     {
         float radius = 20;
