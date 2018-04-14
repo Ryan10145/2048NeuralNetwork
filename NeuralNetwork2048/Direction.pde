@@ -1,4 +1,4 @@
-enum Move
+enum Direction
 {
     UP,
     RIGHT,

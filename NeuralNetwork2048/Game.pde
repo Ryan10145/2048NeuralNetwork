@@ -87,6 +87,7 @@ class Game
         }
     }
 
+    //Returns the appropriate color for a number
     color getColor(int number)
     {
         if(number == 0) return color(240, 215, 145);
@@ -102,13 +103,240 @@ class Game
         return color(red, green, blue);
     }
 
-    void move(Move move)
+    //Applies a move to a main game board
+    //Returns whether the move actually did something
+    boolean move(Direction direction)
     {
-        move(move, board, true);
+        return move(direction, board, true);
+    }
+    
+    //Returns whether a move is possble in a given direction
+    boolean checkMove(Direction direction)
+    {
+        int[][] testBoard = new int[cols][rows];
+        for(int col = 0; col < cols; col++)
+        {
+            for(int row = 0; row < rows; row++)
+            {
+                testBoard[col][row] = board[col][row];
+            }
+        }
+
+        return move(direction, testBoard, false);
     }
 
-    void move(Move move, int[][] board, boolean score)
+    //Applies a move to a given board and whether or not to count towards scoring
+    //Returns whether the move actually did something
+    boolean move(Direction direction, int[][] board, boolean incrementScore)
     {
-        
+        boolean moved = false; //Whether or not the move has actually resulted in something
+        switch(direction)
+        {
+            case UP:
+                for(int col = 0; col < cols; col++)
+                {
+                    for(int row = 0; row < rows; row++)
+                    {
+                        if(row != 0 && board[col][row] != 0)
+                        {
+                            boolean flag = false;
+
+                            int step = 0;
+                            for(int rowA = row - 1; rowA >= 0; rowA--)
+                            {
+                                if(board[col][rowA] == 0) step++;
+                                else break;
+                            }
+                            if(step != 0)
+                            {
+                                for(int rowB = row; rowB < rows; rowB++)
+                                {
+                                    board[col][rowB - step] = board[col][rowB];
+                                    board[col][rowB] = 0;
+                                    flag = true;
+                                    moved = true;
+                                }
+                            }
+
+                            if(board[col][row] == board[col][row - 1])
+                            {
+                                board[col][row - 1] *= 2;
+                                if(incrementScore) score += board[col][row - 1];
+                                board[col][row] = 0;
+                                for(int rowB = row + 1; rowB < rows; rowB++)
+                                {
+                                    board[col][rowB - 1] = board[col][rowB];
+                                    board[col][rowB] = 0;
+                                    moved = true;
+                                }
+                            }
+
+                            if(flag) row = 0;
+                        }
+                    }
+                }
+            break;
+            case RIGHT:
+                for(int col = cols - 1; col >= 0; col--)
+                {
+                    for(int row = 0; row < rows; row++)
+                    {
+                        if(col != cols - 1 && board[col][row] != 0)
+                        {
+                            boolean flag = false;
+
+                            int step = 0;
+                            for(int colA = col + 1; colA < cols; colA++)
+                            {
+                                if(board[colA][row] == 0) step++;
+                                else break;
+                            }
+                            if(step != 0)
+                            {
+                                for(int colB = col; colB >= 0; colB--)
+                                {
+                                    board[colB + step][row] = board[colB][row];
+                                    board[colB][row] = 0;
+                                    flag = true;
+                                    moved = true;
+                                }
+                            }
+
+                            if(board[col][row] == board[col + 1][row])
+                            {
+                                board[col + 1][row] *= 2;
+                                if(incrementScore) score += board[col + 1][row];
+                                board[col][row] = 0;
+                                for(int colB = col - 1; colB >= 0; colB--)
+                                {
+                                    board[colB + 1][row] = board[colB][row];
+                                    board[colB][row] = 0;
+                                    moved = true;
+                                }
+                            }
+
+                            if(flag) col = cols - 1;
+                        }
+                    }
+                }
+            break;
+            case DOWN:
+                for(int col = 0; col < cols; col++)
+                {
+                    for(int row = rows - 1; row >= 0; row--)
+                    {
+                        if(row != rows - 1 && board[col][row] != 0)
+                        {
+                            boolean flag = false;
+
+                            int step = 0;
+                            for(int rowB = row + 1; rowB < rows; rowB++)
+                            {
+                                if(board[col][rowB] == 0) step++;
+                                else break;
+                            }
+                            if(step != 0)
+                            {
+                                for(int rowA = row; rowA >= 0; rowA--)
+                                {
+                                    board[col][rowA + step] = board[col][rowA];
+                                    board[col][rowA] = 0;
+                                    flag = true;
+                                    moved = true;
+                                }
+                            }
+
+                            if(board[col][row] == board[col][row + 1])
+                            {
+                                board[col][row + 1] *= 2;
+                                if(incrementScore) score += board[col][row + 1];
+                                board[col][row] = 0;
+                                for(int rowA = row - 1; rowA >= 0; rowA--)
+                                {
+                                    board[col][rowA + 1] = board[col][rowA];
+                                    board[col][rowA] = 0;
+                                    moved = true;
+                                }
+                            }
+
+                            if(flag) row = rows - 1;
+                        }
+                    }
+                }
+            break;
+            case LEFT:
+                for(int col = 0; col < cols; col++)
+                {
+                    for(int row = 0; row < rows; row++)
+                    {
+                        if(col != 0 && board[col][row] != 0)
+                        {
+                            boolean flag = false;
+
+                            int step = 0;
+                            for(int colA = col - 1; colA >= 0; colA--)
+                            {
+                                if(board[colA][row] == 0) step++;
+                                else break;
+                            }
+                            if(step != 0)
+                            {
+                                for(int colB = col; colB < cols; colB++)
+                                {
+                                    board[colB - step][row] = board[colB][row];
+                                    board[colB][row] = 0;
+                                    flag = true;
+                                    moved = true;
+                                }
+                            }
+
+                            if(board[col][row] == board[col - 1][row])
+                            {
+                                board[col - 1][row] *= 2;
+                                if(incrementScore) score += board[col - 1][row];
+                                board[col][row] = 0;
+                                for(int colB = col + 1; colB < cols; colB++)
+                                {
+                                    board[colB - 1][row] = board[colB][row];
+                                    board[colB][row] = 0;
+                                    moved = true;
+                                }
+                            }
+
+                            if(flag) col = 0;
+                        }
+                    }
+                }
+            break;
+            default:
+
+            break;
+        }
+
+        if(moved)
+        {
+            //Generate a list of all possible locations for a new square
+            ArrayList<int[]> possible = new ArrayList<int[]>();
+            for(int col = 0; col < cols; col++)
+            {
+                for(int row = 0; row < rows; row++)
+                {
+                    if(board[col][row] == 0) possible.add(new int[] {col, row});
+                }
+            }
+
+            //If there are possible locations
+            if(possible.size() > 0)
+            {
+                //Get a random coordinate
+                int randomIndex = (int) random(0, possible.size());
+                int[] randomCoords = possible.get(randomIndex);
+
+                int number = random(1) > 0.1 ? 2 : 4; //10% chance for a 4 
+                board[randomCoords[0]][randomCoords[1]] = number;
+            }
+        }
+
+        return moved;
     }
 }
