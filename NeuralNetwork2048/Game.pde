@@ -10,8 +10,6 @@ class Game
 
     int[][] board;
 
-    float LOG_2 = log(2);
-
     Game(int cols, int rows, float borderWidth, float squareLength)
     {
         this.cols = cols;
@@ -90,8 +88,7 @@ class Game
     //Returns the appropriate color for a number
     color getColor(int number)
     {
-        if(number == 0) return color(240, 215, 145);
-        float power = round(log(number) / LOG_2);
+        float power = logBase2(number);
         float red = 240 - power * 15;
         float green = 215 - power * 15;
         float blue = 145 - power * 15;
@@ -338,5 +335,36 @@ class Game
         }
 
         return moved;
+    }
+
+    //Returns 1D array of the board for feeding into the neural network
+    //Takes all of the values and returns them relative to the max value
+    float[] getInput()
+    {
+        float[] array = new float[cols * rows];
+        int max = 0;
+
+        for(int col = 0; col < cols; col++)
+        {
+            for(int row = 0; row < rows; row++)
+            {
+                array[col * cols + row] = board[col][row];
+                if(board[col][row] > max) max = board[col][row];
+            }
+        }
+
+        float maxLog = logBase2(max);
+        for(int col = 0; col < cols; col++)
+        {
+            for(int row = 0; row < rows; row++)
+            {
+                if(array[col * cols + row] != 0)
+                {
+                    array[col * cols + row] = logBase2(array[col * cols + row]) / maxLog;
+                }
+            }
+        }
+
+        return array;
     }
 }
