@@ -36,25 +36,38 @@ class Population
             game.reset();
             network.setDNA(currentPopulation[i]);
             
-            int fails = 0;
-            while(!game.gameOver && fails < 10)
+            while(!game.gameOver)
             {
-                network.respond(game.getInput());
-                switch(network.getResponse())
+                float[] responses = network.respond(game.getInput());
+
+                boolean moved = false;
+                while(!moved)
                 {
-                    case 0:
-                        if(!game.move(Direction.UP)) fails++;
-                    break;
-                    case 1:
-                        if(!game.move(Direction.RIGHT)) fails++;
-                    break;
-                    case 2:
-                        if(!game.move(Direction.DOWN)) fails++;
-                    break;
-                    case 3:
-                        if(!game.move(Direction.LEFT)) fails++;
-                    break;
+                    switch(getMax(responses))
+                    {
+                        case 0:
+                            if(!game.move(Direction.UP)) responses[0] = -100; 
+                            else moved = true;
+                        break;
+                        case 1:
+                            if(!game.move(Direction.RIGHT)) responses[1] = -100;
+                            else moved = true;
+                        break;
+                        case 2:
+                            if(!game.move(Direction.DOWN)) responses[2] = -100;
+                            else moved = true;
+                        break;
+                        case 3:
+                            if(!game.move(Direction.LEFT)) responses[3] = -100;
+                            else moved = true;
+                        break;
+                        default:
+                            moved = true;
+                            game.update();
+                        break;
+                    }
                 }
+                game.update();
             }
 
             currentPopulation[i].fitness = game.score * game.score;

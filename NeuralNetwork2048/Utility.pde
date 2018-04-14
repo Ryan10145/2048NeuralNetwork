@@ -38,6 +38,23 @@ float[] getRandomWeights(int length)
     return random;
 }
 
+//Returns index of the max value of an array
+int getMax(float[] values)
+{
+    float max = -100;
+    int maxIndex = -1;
+    for(int i = 0; i < values.length; i++)
+    {
+        if(values[i] > max)
+        {
+            max = values[i];
+            maxIndex = i;
+        }
+    }
+
+    return maxIndex;
+}
+
 //Calculates the log base 2 of a number up to 2^17
 float logBase2(float valueF)
 {
