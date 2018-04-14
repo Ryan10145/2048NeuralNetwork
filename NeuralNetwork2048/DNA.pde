@@ -59,4 +59,59 @@ class Dna
             }
         }   
     }
+
+    void output(String fileName)
+    {
+        PrintWriter writer = createWriter(fileName);
+
+        writer.println(numOfInputs + " " + numOfHidden + " " + numOfOutputs);
+        for(int i = 0; i < weights.length; i++)
+        {
+            for(int j = 0; j < weights[i].length; j++)
+            {
+                for(int k = 0; k < weights[i][j].length; k++)
+                {
+                    writer.println(weights[i][j][k]);
+                }
+            }
+        }
+
+        writer.flush();
+        writer.close();
+    }
+
+    void input(String fileName)
+    {
+        try
+        {
+            BufferedReader reader = createReader(fileName);
+
+            String[] data = split(reader.readLine(), " ");
+            int numOfInputs = Integer.parseInt(data[0]);
+            int numOfHidden = Integer.parseInt(data[1]);
+            int numOfOutputs = Integer.parseInt(data[2]);
+            
+            weights = new float[2][][];
+
+            weights[0] = new float[numOfHidden][numOfInputs];
+            weights[1] = new float[numOfOutputs][numOfHidden];
+
+            for(int i = 0; i < weights.length; i++)
+            {
+                for(int j = 0; j < weights[i].length; j++)
+                {
+                    for(int k = 0; k < weights[i][j].length; k++)
+                    {
+                        weights[i][j][k] = Float.parseFloat(reader.readLine());
+                    }
+                }
+            }
+
+            reader.close();
+        }
+        catch(IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
 }

@@ -7,6 +7,8 @@ class Population
     Network network;
     Game game;
 
+    Dna best;
+
     public Population(int cols, int rows)
     {
         currentPopulation = new Dna[100];
@@ -20,6 +22,8 @@ class Population
         current = 0;
         network = new Network(currentPopulation[current]);
         game = new Game(cols, rows, 2, 80);
+
+        best = null;
     }
 
     void run()
@@ -51,6 +55,8 @@ class Population
             }
 
             currentPopulation[i].fitness = game.score * game.score;
+            if(best == null) best = currentPopulation[i];
+            else if(currentPopulation[i].fitness > best.fitness) best = currentPopulation[i];
 
             println("Current Species: " + i + "\tScore: " + game.score);
         }

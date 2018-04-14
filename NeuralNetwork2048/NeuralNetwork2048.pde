@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.io.*;
 
 Population population;
 
@@ -23,6 +24,8 @@ void draw()
     {
         population.run();
         population.update();
+
+        println("Best so Far: " + sqrt(population.best.fitness));
     }
     population.show(width / 2, height / 2);
 }
