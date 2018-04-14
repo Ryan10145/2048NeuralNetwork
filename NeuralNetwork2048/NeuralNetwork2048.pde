@@ -20,7 +20,7 @@ void draw()
 {
     background(230);
     
-    if(population.generationCount < 1000)
+    if(population.generationCount < 50)
     {
         population.run();
         population.update();
@@ -29,6 +29,8 @@ void draw()
     }
     else
     {
+        
+        population.game.board = population.bestBoard;
         population.best.output("best.txt");
     }
     population.show(width / 2, height / 2);

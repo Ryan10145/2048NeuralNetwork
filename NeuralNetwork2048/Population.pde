@@ -9,6 +9,7 @@ class Population
     Game game;
 
     Dna best;
+    int[][] bestBoard;
 
     //Creates a population that manages a game with a specified amount of columns and rows
     public Population(int cols, int rows)
@@ -26,6 +27,7 @@ class Population
         game = new Game(cols, rows, 2, 80);
 
         best = null;
+        bestBoard = new int[cols][rows];
     }
 
     //Runs all of the networks in the current population
@@ -71,8 +73,28 @@ class Population
             }
 
             currentPopulation[i].fitness = game.score * game.score;
-            if(best == null) best = currentPopulation[i];
-            else if(currentPopulation[i].fitness > best.fitness) best = currentPopulation[i];
+            if(best == null)
+            {
+                best = currentPopulation[i];
+                for(int col = 0; col < game.cols; col++)
+                {
+                    for(int row = 0; row < game.rows; row++)
+                    {
+                        bestBoard[col][row] = game.board[col][row];
+                    }
+                }
+            }
+            else if(currentPopulation[i].fitness > best.fitness)
+            {
+                best = currentPopulation[i];
+                for(int col = 0; col < game.cols; col++)
+                {
+                    for(int row = 0; row < game.rows; row++)
+                    {
+                        bestBoard[col][row] = game.board[col][row];
+                    }
+                }
+            }
 
             println("Current Species: " + i + "\tScore: " + game.score);
         }
