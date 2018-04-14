@@ -7,6 +7,7 @@ class Game
     float squareLength;
 
     int score;
+    boolean gameOver;
 
     int[][] board;
 
@@ -38,6 +39,7 @@ class Game
         board[randCol][randRow] = 2;
 
         this.score = 0;
+        gameOver = false;
     }
 
     //Draws the board centered at specified coordinates
@@ -82,6 +84,17 @@ class Game
                         squareY + borderWidth + squareLength / 2.0);
                 }
             }
+        }
+
+        fill(0);
+        textSize(20);
+        textAlign(CENTER, CENTER);
+        text("Score: " + score, centerX, 
+            centerY + (rows / 2.0 + 0.5) * squareLength - ((rows + 1) / 2.0) * borderWidth);
+        if(gameOver) 
+        {
+            text("Game Over!", centerX,
+                centerY + (rows / 2.0 + 1) * squareLength - ((rows + 1) / 2.0) * borderWidth);
         }
     }
 
@@ -366,5 +379,17 @@ class Game
         }
 
         return array;
+    }
+
+    void update()
+    {
+        if(!gameOver)
+        {
+            if(!(checkMove(Direction.UP) || checkMove(Direction.RIGHT)
+                || checkMove(Direction.DOWN) || checkMove(Direction.LEFT))) //If cannot move in any direction
+            {
+                gameOver = true;
+            }
+        }
     }
 }

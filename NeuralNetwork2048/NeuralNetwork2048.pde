@@ -19,7 +19,9 @@ void setup()
 
 void draw()
 {
+    background(230);
     game.draw(width / 2, height / 4);
+    game.update();
 
     if(frameCount != 0)
     {
