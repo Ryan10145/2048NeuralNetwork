@@ -20,17 +20,15 @@ void draw()
 {
     background(230);
     
-    if(population.generationCount < 50)
+    if(population.generationCount < 1000)
     {
-        population.run();
+        for(int i = 0; i < 5; i++) population.run();
         population.update();
 
-        println("Best so Far: " + sqrt(population.best.fitness));
+        println("Best so Far: " + sqrt(population.best.fitness / 5.0));
     }
     else
     {
-        
-        population.game.board = population.bestBoard;
         population.best.output("best.txt");
     }
     population.show(width / 2, height / 2);

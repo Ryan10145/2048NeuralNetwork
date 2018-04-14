@@ -72,7 +72,7 @@ class Population
                 game.update();
             }
 
-            currentPopulation[i].fitness = game.score * game.score;
+            currentPopulation[i].fitness += game.score * game.score;
             if(best == null)
             {
                 best = currentPopulation[i];
