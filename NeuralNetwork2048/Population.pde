@@ -1,4 +1,122 @@
 class Population
 {
+    Dna[] currentPopulation;
+    int current;
+    int generationCount;
+
+    Network network;
+    Game game;
+
+    public Population(int cols, int rows)
+    {
+        currentPopulation = new Dna[100];
+        generationCount = 0;
+
+        for(int i = 0; i < currentPopulation.length; i++)
+        {
+            currentPopulation[i] = new Dna(cols * rows, 9, 4);
+        }
+
+        current = 0;
+        network = new Network(currentPopulation[current]);
+        game = new Game(cols, rows, 2, 80);
+    }
+
+    void run()
+    {
+        for(int i = 0; i < currentPopulation.length; i++)
+        {
+            game.reset();
+            network.setDNA(currentPopulation[i]);
+            
+            int fails = 0;
+            while(!game.gameOver && fails < 10)
+            {
+                network.respond(game.getInput());
+                switch(network.getResponse())
+                {
+                    case 0:
+                        if(!game.move(Direction.UP)) fails++;
+                    break;
+                    case 1:
+                        if(!game.move(Direction.RIGHT)) fails++;
+                    break;
+                    case 2:
+                        if(!game.move(Direction.DOWN)) fails++;
+                    break;
+                    case 3:
+                        if(!game.move(Direction.LEFT)) fails++;
+                    break;
+                }
+            }
+
+            currentPopulation[i].fitness = game.score * game.score;
+
+            println("Current Species: " + i + "\tScore: " + game.score);
+        }
+    }
+
+    void update()
+    {
+        ArrayList<Dna> matingPool = new ArrayList<Dna>();
+        float bestFitness = getMaxFitness();
+        for(Dna dna : currentPopulation)
+        {
+            float count = map(dna.fitness, 0, bestFitness, 0, 100);
+            for(int i = 0; i < count; i++) matingPool.add(dna);
+        }
+        
+        for(int i = 0; i < currentPopulation.length; i++)
+        {
+            Dna dna1 = matingPool.get(int(random(matingPool.size())));
+            Dna dna2 = matingPool.get(int(random(matingPool.size())));
+            
+            Dna child = dna1.cross(dna2);
+            child.mutate();
+            
+            currentPopulation[i] = child;
+        }
+        
+        generationCount++;
+        
+        println(generationCount + " : " + bestFitness);
+    }
     
+    float getMaxFitness()
+    {
+        float highest = 0;
+        for(int i = 0; i < currentPopulation.length; i++)
+        {
+            if(currentPopulation[i].fitness > highest)
+            {
+                highest = currentPopulation[i].fitness;
+            }
+        }
+
+        return highest;
+    }
+
+    Dna getBest()
+    {
+        Dna best = null;
+
+        for(int i = 0; i < currentPopulation.length; i++)
+        {
+            if(best == null)
+            {
+                best = currentPopulation[i];
+            }
+            else if(currentPopulation[i].fitness > best.fitness)
+            {
+                best = currentPopulation[i];
+            }
+        }
+
+        return best;
+    }
+
+    void show(float centerX, float centerY)
+    {
+        game.draw(centerX, centerY);
+    }
 }

@@ -4,11 +4,15 @@ class Network
     Neuron[] hiddenLayer;
     Neuron[] outputLayer;
 
+    Dna dna;
+
     public Network(int numOfInputs, int numOfHidden, int numOfOutputs)
     {
         inputLayer = new Neuron[numOfInputs];
         hiddenLayer = new Neuron[numOfHidden];
         outputLayer = new Neuron[numOfOutputs];
+
+        dna = new Dna(numOfInputs, numOfHidden, numOfOutputs);
 
         for(int i = 0; i < numOfInputs; i++)
         {
@@ -21,6 +25,28 @@ class Network
         for(int i = 0; i < numOfOutputs; i++)
         {
             outputLayer[i] = new Neuron(hiddenLayer, getRandomWeights(numOfHidden));
+        }
+    }
+
+    public Network(Dna dna)
+    {
+        inputLayer = new Neuron[dna.numOfInputs];
+        outputLayer = new Neuron[dna.numOfOutputs];
+        hiddenLayer = new Neuron[dna.numOfHidden];
+
+        this.dna = dna;
+
+        for(int i = 0; i < inputLayer.length; i++)
+        {
+            inputLayer[i] = new Neuron();
+        }
+        for(int i = 0; i < hiddenLayer.length; i++)
+        {
+            hiddenLayer[i] = new Neuron(inputLayer, dna.weights[0][i]);
+        }
+        for(int i = 0; i < outputLayer.length; i++)
+        {
+            outputLayer[i] = new Neuron(hiddenLayer, dna.weights[1][i]);
         }
     }
 
@@ -72,6 +98,24 @@ class Network
         for(int i = 0; i < outputLayer.length; i++)
         {
 
+        }
+    }
+
+    void setDNA(Dna dna)
+    {
+        this.dna = dna;
+
+        for(int i = 0; i < inputLayer.length; i++)
+        {
+            inputLayer[i] = new Neuron();
+        }
+        for(int i = 0; i < hiddenLayer.length; i++)
+        {
+            hiddenLayer[i] = new Neuron(inputLayer, dna.weights[0][i]);
+        }
+        for(int i = 0; i < outputLayer.length; i++)
+        {
+            outputLayer[i] = new Neuron(hiddenLayer, dna.weights[1][i]);
         }
     }
 }
