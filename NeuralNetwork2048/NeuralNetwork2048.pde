@@ -266,7 +266,10 @@ void keyPressed()
 
         break;
         case RUN:
-
+            if(key == 'r' || key == 'R')
+            {
+                game.reset();
+            }
         break;
         case GENERATIONS:
             if(key >= 48 && key <= 57) //Check if character is a number
