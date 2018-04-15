@@ -15,7 +15,8 @@ enum GameState
     TRAIN,
     RUN,
     GENERATIONS,
-    INPUT
+    INPUT,
+    HELP
 }
 
 //Precalculated sigmoid values to save computation time

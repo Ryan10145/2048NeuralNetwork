@@ -7,6 +7,7 @@ Network network;
 Button play;
 Button train;
 Button run;
+Button help;
 
 GameState gameState = GameState.MENU;
 int generationsToTrain;
@@ -34,6 +35,8 @@ void setup()
         color(241, 213, 146), color(229, 208, 157));
     run = new Button("Run a Trained Neural Network", width / 2 - 160, height / 2 + 60, 320, 60,
         color(241, 213, 146), color(229, 208, 157));
+    help = new Button("Help", width / 2 - 110, height / 2 + 200, 220, 60,
+        color(241, 213, 146), color(229, 208, 157));
 
     generationsToTrain = 0;
 
@@ -54,6 +57,36 @@ void draw()
             play.show();
             train.show();
             run.show();
+            help.show();
+
+            if(play.mouseOver())
+            {
+                stroke(100);
+                strokeWeight(2);    
+                line(float(width / 2 - 120), float(height / 2 - 70), float(width / 2 - 150), float(height / 2 - 70));
+                line(float(width / 2 + 120), float(height / 2 - 70), float(width / 2 + 150), float(height / 2 - 70));
+            }
+            if(train.mouseOver())
+            {
+                stroke(100);
+                strokeWeight(2); 
+                line(float(width / 2 - 150), float(height / 2 + 10), float(width / 2 - 180), float(height / 2 + 10));
+                line(float(width / 2 + 150), float(height / 2 + 10), float(width / 2 + 180), float(height / 2 + 10));
+            }
+            if(run.mouseOver())
+            {
+                stroke(100);
+                strokeWeight(2);   
+                line(float(width / 2 - 170), float(height / 2 + 90), float(width / 2 - 200), float(height / 2 + 90));
+                line(float(width / 2 + 170), float(height / 2 + 90), float(width / 2 + 200), float(height / 2 + 90));
+            }
+            if(help.mouseOver())
+            {
+                stroke(100);
+                strokeWeight(2);
+                line(float(width / 2 - 120), float(height / 2 + 230), float(width / 2 - 150), float(height / 2 + 230));
+                line(float(width / 2 + 120), float(height / 2 + 230), float(width / 2 + 150), float(height / 2 + 230));
+            }
         break;
         case PLAY:
             game.update();
@@ -123,6 +156,68 @@ void draw()
         case INPUT:
 
         break;
+        case HELP:
+            fill(0);
+            textSize(40);
+            textAlign(CENTER, CENTER);
+            text("Help", width / 2, 50);
+            
+            play.show();
+            train.show();
+            run.show();
+
+            textSize(25);
+            text("On any screen, press backspace to go back", width / 2, height / 2 + 180);
+            text("Press escape to quit the application", width / 2, height / 2 + 220);
+
+            if(play.mouseOver())
+            {
+                stroke(100);
+                strokeWeight(2);    
+                line(float(width / 2 - 120), float(height / 2 - 70), float(width / 2 - 150), float(height / 2 - 70));
+                line(float(width / 2 + 120), float(height / 2 - 70), float(width / 2 + 150), float(height / 2 - 70));
+                
+                textSize(15);
+                textAlign(LEFT, CENTER);
+                text("Press to Play 2048!", 20, height / 2 - 70);
+
+                textAlign(RIGHT, CENTER);
+                text("Use Arrow Keys to Move", width - 20, height / 2 - 80);
+                text("Press R to Restart", width - 20, height / 2 - 60);
+            }
+            if(train.mouseOver())
+            {
+                stroke(100);
+                strokeWeight(2); 
+                line(float(width / 2 - 150), float(height / 2 + 10), float(width / 2 - 180), float(height / 2 + 10));
+                line(float(width / 2 + 150), float(height / 2 + 10), float(width / 2 + 180), float(height / 2 + 10));
+                
+                textSize(15);
+                textAlign(LEFT, CENTER);
+                text("Train a Network!", 20, height / 2 + 10);
+
+                textSize(12);
+                textAlign(RIGHT, CENTER);
+                text("Enter in number of generations", width - 20, height / 2 - 2);
+                text("More Gens = Better Network", width - 20, height / 2 + 10);
+                text("Save network as a file", width - 20, height / 2 + 22);
+            }
+            if(run.mouseOver())
+            {
+                stroke(100);
+                strokeWeight(2);   
+                line(float(width / 2 - 170), float(height / 2 + 90), float(width / 2 - 200), float(height / 2 + 90));
+                line(float(width / 2 + 170), float(height / 2 + 90), float(width / 2 + 200), float(height / 2 + 90));
+                
+                textSize(15);
+                textAlign(LEFT, CENTER);
+                text("Run a Trained Network!", 20, height / 2 + 90);
+
+                textAlign(RIGHT, CENTER);
+                text("Run a saved network", width - 20, height / 2 + 80);
+                text("Press R to restart", width - 20, height / 2 + 100);
+            }
+        break;
         default:
 
         break;
@@ -191,6 +286,9 @@ void keyPressed()
         case INPUT:
 
         break;
+        case HELP:
+        
+        break;
         default:
 
         break;
@@ -215,6 +313,10 @@ void mousePressed()
         {
             gameState = GameState.INPUT;
             selectInput("Select a Network File", "fileSelected", new File(path));
+        }
+        else if(help.mouseOver())
+        {
+            gameState = GameState.HELP;
         }
     }
     else if(gameState == GameState.PLAY)
@@ -242,6 +344,11 @@ void mousePressed()
 
 void outSelected(File output)
 {
+    if(output == null)
+    {
+        gameState = GameState.MENU;
+        return;
+    }
     path = output.getAbsolutePath();
     population.best.output(output.getAbsolutePath());
     generationsToTrain = 0;
@@ -249,6 +356,11 @@ void outSelected(File output)
 
 void fileSelected(File input)
 {
+    if(input == null)
+    {
+        gameState = GameState.MENU;
+        return;
+    }
     path = input.getAbsolutePath();
     Dna dna = new Dna(input.getAbsolutePath());
     network = new Network(dna);

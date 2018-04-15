@@ -62,6 +62,7 @@ class Game
 
                 //Draw border
                 fill(0);
+                noStroke();
                 //Draw up side
                 rect(squareX, squareY, borderWidth * 2 + squareLength, borderWidth); 
                 //Draw right side
