@@ -6,3 +6,5 @@ application.windows32
 application.windows64
 application.macosx
 NeuralNetwork2048/tempCodeRunnerFile.pde
+*.zip
+application.*

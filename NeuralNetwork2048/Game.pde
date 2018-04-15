@@ -61,7 +61,7 @@ class Game
                 int number = board[col][row];
 
                 //Draw border
-                fill(186, 172, 160);
+                fill(146, 132, 120);
                 noStroke();
                 int filletRadius = 4;
                 int borderWidthPadding = 2;

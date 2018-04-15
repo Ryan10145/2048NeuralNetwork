@@ -170,7 +170,7 @@ class Population
     //Draws the game
     void show(float centerX, float centerY)
     {
-        game.draw(centerX, centerY - 50);
-        network.show(centerX, centerY + 250);
+        game.draw(centerX, centerY + 50);
+        network.show(centerX, centerY + 450);
     }
 }

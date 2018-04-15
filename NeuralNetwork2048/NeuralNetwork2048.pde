@@ -101,15 +101,15 @@ void draw()
             else
             {
                 fill(0);
-                text("Training Finished!", width / 2, height * 2 / 3.0 + 120);
+                text("Training Finished!", width / 2, height * 3 / 4.0 + 60);
             }
 
             textAlign(CENTER, CENTER);
             textSize(20);
             fill(0);
-            text("Best so Far: " + sqrt(population.best.fitness / 5.0), width / 2, height * 2 / 3.0);
-            text("Current Generation: " + population.generationCount, width / 2, height * 2 / 3.0 + 30);
-            text("Target Generation: " + generationsToTrain, width / 2, height * 2 / 3.0 + 60);
+            text("Best so Far: " + sqrt(population.best.fitness / 5.0), width / 2, height * 3 / 4.0 - 30);
+            text("Current Generation: " + population.generationCount, width / 2, height * 3 / 4.0);
+            text("Target Generation: " + generationsToTrain, width / 2, height * 3 / 4.0 + 30);
             population.show(width / 2, height / 4);
         break;
         case RUN:
