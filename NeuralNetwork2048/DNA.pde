@@ -29,6 +29,11 @@ class Dna
         }
     }
 
+    public Dna(String fileName)
+    {
+        input(fileName);
+    }
+
     //Crosses the current DNA with a mate to form a child that has parts of both DNA
     Dna cross(Dna mate)
     {
@@ -93,9 +98,9 @@ class Dna
             BufferedReader reader = createReader(fileName);
 
             String[] data = split(reader.readLine(), " ");
-            int numOfInputs = Integer.parseInt(data[0]);
-            int numOfHidden = Integer.parseInt(data[1]);
-            int numOfOutputs = Integer.parseInt(data[2]);
+            numOfInputs = Integer.parseInt(data[0]);
+            numOfHidden = Integer.parseInt(data[1]);
+            numOfOutputs = Integer.parseInt(data[2]);
             
             weights = new float[2][][];
 

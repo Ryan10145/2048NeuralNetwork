@@ -3,12 +3,14 @@ import java.io.*;
 
 Game game;
 Population population;
+Network network;
 Button play;
 Button train;
 Button run;
 
-int gameState = 0; //0 - main, 1 - play, 2 - train, 3 - run, 4 - select how many generations to train
+int gameState = 0; //0 - main, 1 - play, 2 - train, 3 - run, 4 - how many generations to train, 5 - select input
 int generationsToTrain;
+String output;
 
 void setup()
 {
@@ -49,10 +51,57 @@ void draw()
             game.draw(width / 2, height / 2);
         break;
         case 2:
+            if(population.generationCount < generationsToTrain)
+            {
+                for(int i = 0; i < 5; i++) population.run();
+                population.update();
+            }
+            else
+            {
+                population.best.output("best.txt");
+            }
 
+            textAlign(CENTER, CENTER);
+            textSize(20);
+            text("Best so Far: " + sqrt(population.best.fitness / 5.0), width / 2, height * 2 / 3.0);
+            text("Current Generation: " + population.generationCount, width / 2, height * 2 / 3.0 + 30);
+            text("Target Generation: " + generationsToTrain, width / 2, height * 2 / 3.0 + 60);
+            population.show(width / 2, height / 4);
         break;
         case 3:
+            if(frameCount % 10 == 0)
+            {
+                float[] responses = network.respond(game.getInput());
 
+                boolean moved = false;
+                while(!moved)
+                {
+                    switch(getMax(responses))
+                    {
+                        case 0:
+                            if(!game.move(Direction.UP)) responses[0] = -100; 
+                            else moved = true;
+                        break;
+                        case 1:
+                            if(!game.move(Direction.RIGHT)) responses[1] = -100;
+                            else moved = true;
+                        break;
+                        case 2:
+                            if(!game.move(Direction.DOWN)) responses[2] = -100;
+                            else moved = true;
+                        break;
+                        case 3:
+                            if(!game.move(Direction.LEFT)) responses[3] = -100;
+                            else moved = true;
+                        break;
+                        default:
+                            moved = true;
+                            game.update();
+                        break;
+                    }
+                }
+                game.update();
+            }
         break;
         case 4:
             fill(0);
@@ -61,28 +110,18 @@ void draw()
             text("Generations To Train", width / 2, height / 2 - 100);
             text(generationsToTrain, width / 2, height / 2);
         break;
+        case 5:
+            selectInput("Select a Network File", "fileSelected");
+            break;
         default:
 
         break;
     }
-    
-    // if(population.generationCount < 1000)
-    // {
-    //     for(int i = 0; i < 5; i++) population.run();
-    //     population.update();
-
-    //     println("Best so Far: " + sqrt(population.best.fitness / 5.0));
-    // }
-    // else
-    // {
-    //     population.best.output("best.txt");
-    // }
-    // population.show(width / 2, height / 2);
 }
 
 void keyPressed()
 {
-    if(keyCode == ESC)
+    if(gameState != 4 && keyCode == BACKSPACE)
     {
         gameState = 0;
     }
@@ -127,7 +166,12 @@ void keyPressed()
             }
             else if(keyCode == BACKSPACE)
             {
-                generationsToTrain /= 10;
+                if(generationsToTrain == 0) gameState = 0;
+                else generationsToTrain /= 10;
+            }
+            else if(keyCode == ENTER || keyCode == RETURN)
+            {
+                gameState = 2;
             }
         break;
     }
@@ -147,11 +191,17 @@ void mousePressed()
         }
         else if(run.mouseOver())
         {
-            gameState = 3;
+            gameState = 5;
         }
     }
-    else if(gameState == 4)
-    {
-        if(train.mouseOver()) gameState = 2;
-    }
+}
+
+void fileSelected(File input)
+{
+    Dna dna = new Dna(input.getAbsolutePath());
+    network = new Network(dna);
+
+    game.reset();
+
+    gameState = 2;
 }

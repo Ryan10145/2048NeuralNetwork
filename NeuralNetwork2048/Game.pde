@@ -37,6 +37,7 @@ class Game
         int randRow = (int) random(0, rows);
 
         board[randCol][randRow] = 2;
+        createNewTile(board);
 
         this.score = 0;
         gameOver = false;
@@ -325,26 +326,7 @@ class Game
 
         if(moved)
         {
-            //Generate a list of all possible locations for a new square
-            ArrayList<int[]> possible = new ArrayList<int[]>();
-            for(int col = 0; col < cols; col++)
-            {
-                for(int row = 0; row < rows; row++)
-                {
-                    if(board[col][row] == 0) possible.add(new int[] {col, row});
-                }
-            }
-
-            //If there are possible locations
-            if(possible.size() > 0)
-            {
-                //Get a random coordinate
-                int randomIndex = (int) random(0, possible.size());
-                int[] randomCoords = possible.get(randomIndex);
-
-                int number = random(1) > 0.1 ? 2 : 4; //10% chance for a 4 
-                board[randomCoords[0]][randomCoords[1]] = number;
-            }
+            createNewTile(board);
         }
 
         return moved;
@@ -391,6 +373,30 @@ class Game
             {
                 gameOver = true;
             }
+        }
+    }
+
+    void createNewTile(int[][] board)
+    {
+        //Generate a list of all possible locations for a new square
+        ArrayList<int[]> possible = new ArrayList<int[]>();
+        for(int col = 0; col < cols; col++)
+        {
+            for(int row = 0; row < rows; row++)
+            {
+                if(board[col][row] == 0) possible.add(new int[] {col, row});
+            }
+        }
+
+        //If there are possible locations
+        if(possible.size() > 0)
+        {
+            //Get a random coordinate
+            int randomIndex = (int) random(0, possible.size());
+            int[] randomCoords = possible.get(randomIndex);
+
+            int number = random(1) > 0.1 ? 2 : 4; //10% chance for a 4 
+            board[randomCoords[0]][randomCoords[1]] = number;
         }
     }
 }
