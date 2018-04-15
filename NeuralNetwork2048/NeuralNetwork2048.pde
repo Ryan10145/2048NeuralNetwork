@@ -102,6 +102,7 @@ void draw()
                 }
                 game.update();
             }
+            game.draw(width / 2, height / 2);
         break;
         case 4:
             fill(0);
@@ -111,7 +112,6 @@ void draw()
             text(generationsToTrain, width / 2, height / 2);
         break;
         case 5:
-            selectInput("Select a Network File", "fileSelected");
             break;
         default:
 
@@ -192,6 +192,7 @@ void mousePressed()
         else if(run.mouseOver())
         {
             gameState = 5;
+            selectInput("Select a Network File", "fileSelected");
         }
     }
 }
@@ -203,5 +204,5 @@ void fileSelected(File input)
 
     game.reset();
 
-    gameState = 2;
+    gameState = 3;
 }
