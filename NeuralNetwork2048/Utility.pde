@@ -7,6 +7,17 @@ enum Direction
     LEFT
 }
 
+//Enum for handling game state
+enum GameState
+{
+    MENU,
+    PLAY,
+    TRAIN,
+    RUN,
+    GENERATIONS,
+    INPUT
+}
+
 //Precalculated sigmoid values to save computation time
 float[] precalculatedSigmoidValues = new float[200];
 
