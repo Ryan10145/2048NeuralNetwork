@@ -14,6 +14,7 @@ String output;
 
 int columns = 4;
 int rows = 4;
+String path;
 
 PImage logo;
 
@@ -37,6 +38,8 @@ void setup()
     generationsToTrain = 0;
 
     logo = loadImage("data/logo.png");
+
+    path = "network.txt";
 }
 
 void draw()
@@ -131,7 +134,7 @@ void keyPressed()
     {
         if(gameState == 2)
         {
-            selectOutput("Select a file to write to", "outSelected");
+            selectOutput("Select a file to write to", "outSelected", new File(path));
         }
         gameState = 0;
     }
@@ -204,7 +207,7 @@ void mousePressed()
         else if(run.mouseOver())
         {
             gameState = 5;
-            selectInput("Select a Network File", "fileSelected");
+            selectInput("Select a Network File", "fileSelected", new File(path));
         }
     }
     else if(gameState == 1)
@@ -232,11 +235,13 @@ void mousePressed()
 
 void outSelected(File output)
 {
+    path = output.getAbsolutePath();
     population.best.output(output.getAbsolutePath());
 }
 
 void fileSelected(File input)
 {
+    path = input.getAbsolutePath();
     Dna dna = new Dna(input.getAbsolutePath());
     network = new Network(dna);
 
