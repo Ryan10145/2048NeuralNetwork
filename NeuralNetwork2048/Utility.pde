@@ -72,7 +72,7 @@ color getColor(int number)
 {
     if(number == 0) return color(205, 193, 179);
     float power = logBase2(number);
-    float red = 238 - power * 5;
+    float red = 238 - power * 10;
     float green = 228 - power * 15;
     float blue = 218 - power * 15;
 
