@@ -8,7 +8,7 @@ Button play;
 Button train;
 Button run;
 
-int gameState = 0; //0 - main, 1 - play, 2 - train, 3 - run, 4 - how many generations to train, 5 - select input
+GameState gameState = GameState.MENU;
 int generationsToTrain;
 String output;
 
@@ -48,18 +48,18 @@ void draw()
 
     switch(gameState)
     {
-        case 0:
+        case MENU:
             imageMode(CENTER);
             image(logo, width / 2, height / 7);
             play.show();
             train.show();
             run.show();
         break;
-        case 1:
+        case PLAY:
             game.update();
             game.draw(width / 2, height / 2);
         break;
-        case 2:
+        case TRAIN:
             if(population.generationCount < generationsToTrain)
             {
                 for(int i = 0; i < 5; i++) population.run();
@@ -77,8 +77,8 @@ void draw()
             text("Target Generation: " + generationsToTrain, width / 2, height * 2 / 3.0 + 60);
             population.show(width / 2, height / 4);
         break;
-        case 3:
-            if(frameCount % 10 == 0)
+        case RUN:
+            if(frameCount % 5 == 0)
             {
                 float[] responses = network.respond(game.getInput());
 
@@ -113,15 +113,16 @@ void draw()
             }
             game.draw(width / 2, height / 2);
         break;
-        case 4:
+        case GENERATIONS:
             fill(0);
             textSize(40);
             textAlign(CENTER, CENTER);
             text("Generations To Train", width / 2, height / 2 - 100);
             text(generationsToTrain, width / 2, height / 2);
         break;
-        case 5:
-            break;
+        case INPUT:
+
+        break;
         default:
 
         break;
@@ -130,21 +131,21 @@ void draw()
 
 void keyPressed()
 {
-    if(gameState != 4 && keyCode == BACKSPACE)
+    if(gameState != GameState.GENERATIONS && keyCode == BACKSPACE)
     {
-        if(gameState == 2)
+        if(gameState == GameState.TRAIN)
         {
             selectOutput("Select a file to write to", "outSelected", new File(path));
         }
-        gameState = 0;
+        gameState = GameState.MENU;
     }
 
     switch(gameState)
     {
-        case 0:
+        case MENU:
 
         break;
-        case 1:
+        case PLAY:
             if(keyCode == UP)
             {
                 game.move(Direction.UP);
@@ -166,51 +167,57 @@ void keyPressed()
                 game.reset();
             }
         break;
-        case 2:
+        case TRAIN:
 
         break;
-        case 3:
+        case RUN:
 
         break;
-        case 4:
+        case GENERATIONS:
             if(key >= 48 && key <= 57) //Check if character is a number
             {
                 generationsToTrain = generationsToTrain * 10 + key - 48;
             }
             else if(keyCode == BACKSPACE)
             {
-                if(generationsToTrain == 0) gameState = 0;
+                if(generationsToTrain == 0) gameState = GameState.MENU;
                 else generationsToTrain /= 10;
             }
             else if((keyCode == ENTER || keyCode == RETURN) && generationsToTrain != 0)
             {
-                gameState = 2;
+                gameState = GameState.TRAIN;
             }
+        break;
+        case INPUT:
+
+        break;
+        default:
+
         break;
     }
 }
 
 void mousePressed()
 {
-    if(gameState == 0)
+    if(gameState == GameState.MENU)
     {
         if(play.mouseOver())
         {
-            gameState = 1;
+            gameState = GameState.PLAY;
             game.reset();
         }
         else if(train.mouseOver())
         {
-            gameState = 4;
+            gameState = GameState.GENERATIONS;
             population.reset(columns, rows);
         }
         else if(run.mouseOver())
         {
-            gameState = 5;
+            gameState = GameState.INPUT;
             selectInput("Select a Network File", "fileSelected", new File(path));
         }
     }
-    else if(gameState == 1)
+    else if(gameState == GameState.PLAY)
     {
         int zoneSize = 300;
 
@@ -237,6 +244,7 @@ void outSelected(File output)
 {
     path = output.getAbsolutePath();
     population.best.output(output.getAbsolutePath());
+    generationsToTrain = 0;
 }
 
 void fileSelected(File input)
@@ -247,5 +255,5 @@ void fileSelected(File input)
 
     game.reset();
 
-    gameState = 3;
+    gameState = GameState.RUN;
 }
