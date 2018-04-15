@@ -15,6 +15,8 @@ String output;
 int columns = 4;
 int rows = 4;
 
+PImage logo;
+
 void setup()
 {
     size(800, 700);
@@ -26,22 +28,26 @@ void setup()
     population = new Population(columns, rows);
 
     play = new Button("Play 2048", width / 2 - 110, height / 2 - 100, 220, 60,
-        color(153, 255, 255), color(133, 235, 235));
-    train = new Button("Train a Neural Network", width / 2 - 130, height / 2, 260, 60,
-        color(153, 255, 255), color(133, 235, 235));
-    run = new Button("Run a Trained Neural Network", width / 2 - 150, height / 2 + 100, 300, 60,
-        color(153, 255, 255), color(133, 235, 235));
+        color(241, 213, 146), color(229, 208, 157));
+    train = new Button("Train a Neural Network", width / 2 - 140, height / 2 - 20, 280, 60,
+        color(241, 213, 146), color(229, 208, 157));
+    run = new Button("Run a Trained Neural Network", width / 2 - 160, height / 2 + 60, 320, 60,
+        color(241, 213, 146), color(229, 208, 157));
 
     generationsToTrain = 0;
+
+    logo = loadImage("data/logo.png");
 }
 
 void draw()
 {
-    background(230);
+    background(227, 221, 221);
 
     switch(gameState)
     {
         case 0:
+            imageMode(CENTER);
+            image(logo, width / 2, height / 7);
             play.show();
             train.show();
             run.show();
@@ -199,6 +205,27 @@ void mousePressed()
         {
             gameState = 5;
             selectInput("Select a Network File", "fileSelected");
+        }
+    }
+    else if(gameState == 1)
+    {
+        int zoneSize = 300;
+
+        if(mouseY < zoneSize && mouseX > zoneSize && mouseX < width - zoneSize)
+        {
+            game.move(Direction.UP);
+        }
+        else if(mouseY > width - zoneSize && mouseX > zoneSize && mouseX < width - zoneSize)
+        {
+            game.move(Direction.DOWN);
+        }
+        else if(mouseX < zoneSize && mouseY > zoneSize && mouseY < height - zoneSize)
+        {
+            game.move(Direction.LEFT);
+        }
+        else if(mouseX > width - zoneSize && mouseY > zoneSize && mouseY < height - zoneSize)
+        {
+            game.move(Direction.RIGHT);
         }
     }
 }
