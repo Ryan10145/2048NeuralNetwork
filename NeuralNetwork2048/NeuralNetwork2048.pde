@@ -182,7 +182,7 @@ void keyPressed()
                 if(generationsToTrain == 0) gameState = 0;
                 else generationsToTrain /= 10;
             }
-            else if(keyCode == ENTER || keyCode == RETURN)
+            else if((keyCode == ENTER || keyCode == RETURN) && generationsToTrain != 0)
             {
                 gameState = 2;
             }
