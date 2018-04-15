@@ -12,18 +12,18 @@ int gameState = 0; //0 - main, 1 - play, 2 - train, 3 - run, 4 - how many genera
 int generationsToTrain;
 String output;
 
+int columns = 4;
+int rows = 4;
+
 void setup()
 {
     size(800, 700);
     frameRate(30);
 
-    int columns = 4;
-    int rows = 4;
-
     setupSigmoidValues();
 
-    game = new Game(4, 4, 2, 80);
-    population = new Population(4, 4);
+    game = new Game(columns, rows, 2, 80);
+    population = new Population(columns, rows);
 
     play = new Button("Play 2048", width / 2 - 110, height / 2 - 100, 220, 60,
         color(153, 255, 255), color(133, 235, 235));
@@ -58,7 +58,7 @@ void draw()
             }
             else
             {
-                population.best.output("best.txt");
+                text("Training Finished!", width / 2, height * 2 / 3.0 + 120);
             }
 
             textAlign(CENTER, CENTER);
@@ -123,6 +123,10 @@ void keyPressed()
 {
     if(gameState != 4 && keyCode == BACKSPACE)
     {
+        if(gameState == 2)
+        {
+            selectOutput("Select a file to write to", "outSelected");
+        }
         gameState = 0;
     }
 
@@ -184,10 +188,12 @@ void mousePressed()
         if(play.mouseOver())
         {
             gameState = 1;
+            game.reset();
         }
         else if(train.mouseOver())
         {
             gameState = 4;
+            population.reset(columns, rows);
         }
         else if(run.mouseOver())
         {
@@ -195,6 +201,11 @@ void mousePressed()
             selectInput("Select a Network File", "fileSelected");
         }
     }
+}
+
+void outSelected(File output)
+{
+    population.best.output(output.getAbsolutePath());
 }
 
 void fileSelected(File input)

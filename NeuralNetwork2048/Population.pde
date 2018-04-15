@@ -14,6 +14,11 @@ class Population
     //Creates a population that manages a game with a specified amount of columns and rows
     public Population(int cols, int rows)
     {
+        reset(cols, rows);
+    }
+
+    void reset(int cols, int rows)
+    {
         currentPopulation = new Dna[100];
         generationCount = 0;
 
