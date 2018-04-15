@@ -29,7 +29,7 @@ class Population
 
         current = 0;
         network = new Network(currentPopulation[current]);
-        game = new Game(cols, rows, 2, 80);
+        game = new Game(cols, rows, 6, 80);
 
         best = null;
         bestBoard = new int[cols][rows];
@@ -170,6 +170,7 @@ class Population
     //Draws the game
     void show(float centerX, float centerY)
     {
-        game.draw(centerX, centerY);
+        game.draw(centerX, centerY - 50);
+        network.show(centerX, centerY + 250);
     }
 }

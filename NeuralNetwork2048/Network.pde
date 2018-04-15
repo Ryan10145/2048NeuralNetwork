@@ -90,17 +90,35 @@ class Network
     //Displays the neural network at given coordinates
     void show(float x, float y)
     {
-        for(int i = 0; i < inputLayer.length; i++)
-        {
-            
-        }
         for(int i = 0; i < hiddenLayer.length; i++)
         {
-
+            hiddenLayer[i].showConnections();
         }
         for(int i = 0; i < outputLayer.length; i++)
         {
+            outputLayer[i].showConnections();
+        }
 
+        for(int i = 0; i < inputLayer.length; i++)
+        {
+            int col = i / 4;
+            int row = i % 4;
+
+            inputLayer[i].show(100 + col * 20, y + row * 20 - 10);
+        }
+        for(int i = 0; i < hiddenLayer.length; i++)
+        {
+            int col = i / 3;
+            int row = i % 3;
+
+            hiddenLayer[i].show(x + col * 20 - 20, y + row * 20);
+        }
+        for(int i = 0; i < outputLayer.length; i++)
+        {
+            float angle = -PI / 2.0 + PI / 2.0 * i;
+            if(angle < 0) angle += 2 * PI;
+
+            outputLayer[i].show(285 + x + 20 * cos(angle), y + 20 * sin(angle) + 20);
         }
     }
 

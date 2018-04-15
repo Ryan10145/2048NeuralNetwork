@@ -67,6 +67,22 @@ int getMax(float[] values)
     return maxIndex;
 }
 
+//Returns the appropriate color for a number
+color getColor(int number)
+{
+    if(number == 0) return color(205, 193, 179);
+    float power = logBase2(number);
+    float red = 238 - power * 5;
+    float green = 228 - power * 15;
+    float blue = 218 - power * 15;
+
+    if(red < 20) red = 20;
+    if(green < 20) green = 20;
+    if(blue < 20) blue = 20;
+
+    return color(red, green, blue);
+}
+
 //Calculates the log base 2 of a number up to 2^17
 float logBase2(float valueF)
 {

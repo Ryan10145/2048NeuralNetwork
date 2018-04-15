@@ -4,10 +4,13 @@ class Neuron
     Neuron[] inputs;
     float[] weights;
     float output;
+
+    float x;
+    float y;
     
     public Neuron()
     {
-
+        
     }
 
     public Neuron(Neuron[] inputs, float[] weights)
@@ -44,9 +47,29 @@ class Neuron
     //Displays a neuron at the specified coordinates
     void show(float x, float y)
     {
+        this.x = x;
+        this.y = y;
+
         float radius = 20;
 
         fill(128 * (1 - output));
+        stroke(0);
+        strokeWeight(1);
         ellipse(x, y, radius, radius);
+    }
+
+    void showConnections()
+    {
+        if(inputs != null)
+        {
+            for(int i = 0; i < inputs.length; i++)
+            {
+                if(weights[i] > 0.5) 
+                {
+                    stroke(0, 255 * weights[i] - 128, 0);
+                    line(inputs[i].x, inputs[i].y, this.x, this.y);
+                }
+            }
+        }
     }
 }

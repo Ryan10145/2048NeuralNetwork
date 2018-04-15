@@ -48,7 +48,7 @@ class Game
     {
         //Calculate top left and top right coordinates
         float x = centerX - (cols / 2.0) * squareLength - ((cols + 1) / 2.0) * borderWidth;
-        float y = centerY - (rows / 2.0) * squareLength - ((rows + 1) / 2.0) * borderWidth;
+        float y = centerY - (rows / 2.0) * squareLength - ((rows + 1) / 2.0) * borderWidth - 10;
 
         for(int col = 0; col < cols; col++)
         {
@@ -61,20 +61,26 @@ class Game
                 int number = board[col][row];
 
                 //Draw border
-                fill(0);
+                fill(186, 172, 160);
                 noStroke();
+                int filletRadius = 4;
+                int borderWidthPadding = 2;
                 //Draw up side
-                rect(squareX, squareY, borderWidth * 2 + squareLength, borderWidth); 
+                rect(squareX - borderWidthPadding / 2, squareY - borderWidthPadding / 2,
+                    borderWidth * 2 + squareLength, borderWidth + borderWidthPadding, filletRadius); 
                 //Draw right side
-                rect(squareX + borderWidth + squareLength, squareY, borderWidth, borderWidth * 2 + squareLength); 
+                rect(squareX + borderWidth + squareLength - borderWidthPadding / 2, squareY - borderWidthPadding / 2,
+                    borderWidth + borderWidthPadding, borderWidth * 2 + squareLength, filletRadius); 
                 //Draw down side
-                rect(squareX, squareY + borderWidth + squareLength, borderWidth * 2 + squareLength, borderWidth);
+                rect(squareX - borderWidthPadding / 2, squareY + borderWidth + squareLength - borderWidthPadding / 2,
+                    borderWidth * 2 + squareLength, borderWidth + borderWidthPadding, filletRadius);
                 //Draw left side
-                rect(squareX, squareY, borderWidth, borderWidth * 2 + squareLength);
+                rect(squareX - borderWidthPadding / 2, squareY - borderWidthPadding / 2,
+                    borderWidth + borderWidthPadding, borderWidth * 2 + squareLength, filletRadius);
 
                 //Draw the actual square
                 fill(getColor(number));
-                rect(squareX + borderWidth, squareY + borderWidth, squareLength, squareLength); 
+                rect(squareX + borderWidth, squareY + borderWidth, squareLength, squareLength, filletRadius); 
 
                 //Draw the number
                 if(number != 0)
@@ -98,21 +104,6 @@ class Game
             text("Game Over!", centerX,
                 centerY + (rows / 2.0 + 1) * squareLength - ((rows + 1) / 2.0) * borderWidth);
         }
-    }
-
-    //Returns the appropriate color for a number
-    color getColor(int number)
-    {
-        float power = logBase2(number);
-        float red = 240 - power * 15;
-        float green = 215 - power * 15;
-        float blue = 145 - power * 15;
-
-        if(red < 20) red = 20;
-        if(green < 20) green = 20;
-        if(blue < 20) blue = 20;
-
-        return color(red, green, blue);
     }
 
     //Applies a move to a main game board

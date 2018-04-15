@@ -26,7 +26,7 @@ void setup()
 
     setupSigmoidValues();
 
-    game = new Game(columns, rows, 2, 80);
+    game = new Game(columns, rows, 6, 80);
     population = new Population(columns, rows);
 
     play = new Button("Play 2048", width / 2 - 110, height / 2 - 100, 220, 60,
@@ -90,7 +90,7 @@ void draw()
         break;
         case PLAY:
             game.update();
-            game.draw(width / 2, height / 2);
+            game.draw(width / 2, height / 2 - 50);
         break;
         case TRAIN:
             if(population.generationCount < generationsToTrain)
@@ -100,11 +100,13 @@ void draw()
             }
             else
             {
+                fill(0);
                 text("Training Finished!", width / 2, height * 2 / 3.0 + 120);
             }
 
             textAlign(CENTER, CENTER);
             textSize(20);
+            fill(0);
             text("Best so Far: " + sqrt(population.best.fitness / 5.0), width / 2, height * 2 / 3.0);
             text("Current Generation: " + population.generationCount, width / 2, height * 2 / 3.0 + 30);
             text("Target Generation: " + generationsToTrain, width / 2, height * 2 / 3.0 + 60);
@@ -144,7 +146,8 @@ void draw()
                 }
                 game.update();
             }
-            game.draw(width / 2, height / 2);
+            game.draw(width / 2, height / 2 - 50);
+            network.show(width / 2, height / 2 + 250);
         break;
         case GENERATIONS:
             fill(0);
